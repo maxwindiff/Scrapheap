@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		0068636029AC102600E18E2A /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0068635F29AC102600E18E2A /* main.swift */; };
+		0068636929AC115A00E18E2A /* matmul.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0068636629AC115A00E18E2A /* matmul.swift */; };
+		0068636A29AC115A00E18E2A /* utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0068636729AC115A00E18E2A /* utils.swift */; };
+		0068636B29AC115A00E18E2A /* matmul.metal in Sources */ = {isa = PBXBuildFile; fileRef = 0068636829AC115A00E18E2A /* matmul.metal */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +28,9 @@
 /* Begin PBXFileReference section */
 		0068635C29AC102600E18E2A /* Scrapheap */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Scrapheap; sourceTree = BUILT_PRODUCTS_DIR; };
 		0068635F29AC102600E18E2A /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		0068636629AC115A00E18E2A /* matmul.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = matmul.swift; sourceTree = "<group>"; };
+		0068636729AC115A00E18E2A /* utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = utils.swift; sourceTree = "<group>"; };
+		0068636829AC115A00E18E2A /* matmul.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = matmul.metal; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +63,9 @@
 		0068635E29AC102600E18E2A /* Scrapheap */ = {
 			isa = PBXGroup;
 			children = (
+				0068636829AC115A00E18E2A /* matmul.metal */,
+				0068636629AC115A00E18E2A /* matmul.swift */,
+				0068636729AC115A00E18E2A /* utils.swift */,
 				0068635F29AC102600E18E2A /* main.swift */,
 			);
 			path = Scrapheap;
@@ -120,7 +129,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0068636A29AC115A00E18E2A /* utils.swift in Sources */,
+				0068636B29AC115A00E18E2A /* matmul.metal in Sources */,
 				0068636029AC102600E18E2A /* main.swift in Sources */,
+				0068636929AC115A00E18E2A /* matmul.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -244,7 +256,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				GCC_OPTIMIZATION_LEVEL = s;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
