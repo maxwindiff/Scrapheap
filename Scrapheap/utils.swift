@@ -2,6 +2,23 @@ import Foundation
 import Metal
 import MetalPerformanceShaders
 
+func makeRandomDeviceVec(_ device:MTLDevice, _ N:Int) -> (MTLBuffer, MPSVector) {
+    let buf = device.makeBuffer(length: MemoryLayout<Float>.stride * N)!
+    let desc = MPSVectorDescriptor(length: N, dataType: .float32)
+    let vec = MPSVector(buffer: buf, descriptor: desc)
+    let rnd = MPSMatrixRandomMTGP32(device: device,
+                                    destinationDataType: .float32,
+                                    seed: 0,
+                                    distributionDescriptor: .uniformDistributionDescriptor(withMinimum: 0, maximum: 1))
+    let cmdQueue = device.makeCommandQueue()!
+    let cmdBuffer = cmdQueue.makeCommandBuffer()!
+    cmdBuffer.label = "MPSMatrixRandom"
+    rnd.encode(commandBuffer: cmdBuffer, destinationVector: vec)
+    cmdBuffer.commit()
+    cmdBuffer.waitUntilCompleted()
+    return (buf, vec)
+}
+
 func makeRandomDeviceMtx(_ device:MTLDevice, _ M:Int, _ N:Int) -> (MTLBuffer, MPSMatrix) {
     let buf = device.makeBuffer(length: MemoryLayout<Float>.stride * M * N)!
     let desc = MPSMatrixDescriptor(rows: M, columns: N, rowBytes: MemoryLayout<Float>.stride * N, dataType: .float32)
@@ -19,7 +36,7 @@ func makeRandomDeviceMtx(_ device:MTLDevice, _ M:Int, _ N:Int) -> (MTLBuffer, MP
     return (buf, mtx)
 }
 
-func clearDeviceMtx(_ buf:MTLBuffer) {
+func clearBuffer(_ buf:MTLBuffer) {
     memset(buf.contents(), 0, buf.length)
 }
 
@@ -35,9 +52,22 @@ func printMtx(_ heading:String, _ mtx:UnsafePointer<Float>, _ rows:Int, _ cols:I
     print("")
 }
 
+func printVec(_ heading:String, _ mtx:UnsafePointer<Float>, _ len:Int) {
+    print(heading, "[", terminator: "")
+    for j in 0..<len {
+        print(String(format: " %9.6f", mtx[j]), terminator: "")
+    }
+    print(" ];")
+}
+
 func printDeviceMtx(_ heading:String, _ buf:MTLBuffer, _ rows:Int, _ cols:Int) {
     let contents = buf.contents().bindMemory(to: Float.self, capacity: rows * cols)
     printMtx(heading, contents, rows, cols)
+}
+
+func printDeviceVec(_ heading:String, _ buf:MTLBuffer, _ len:Int) {
+    let contents = buf.contents().bindMemory(to: Float.self, capacity: len)
+    printVec(heading, contents, len)
 }
 
 func printIfSmall(_ A:MTLBuffer, _ B:MTLBuffer, _ C:MTLBuffer, _ M:Int, _ N:Int, _ K:Int) {
@@ -63,13 +93,13 @@ func checkAndReset(want:MTLBuffer, got:MTLBuffer) {
     if !equals(want, got) {
         print("!! NOT EQUAL !!")
     }
-    clearDeviceMtx(got)
+    clearBuffer(got)
 }
 
-func makePipeline(_ device: MTLDevice, _ name: String) -> MTLComputePipelineState {
+func makePipeline(_ device: MTLDevice, _ name: String, _ constants:MTLFunctionConstantValues = MTLFunctionConstantValues()) -> MTLComputePipelineState {
     let library = device.makeDefaultLibrary()!
     let desc = MTLComputePipelineDescriptor()
-    desc.computeFunction = library.makeFunction(name: name)!
+    desc.computeFunction = try! library.makeFunction(name: name, constantValues: constants)
     desc.threadGroupSizeIsMultipleOfThreadExecutionWidth = true
     let (pso, _) = try! device.makeComputePipelineState(descriptor: desc, options: MTLPipelineOption())
 
@@ -98,4 +128,3 @@ func benchmark(name: String, _ closure: () -> Void) {
     print(String(repeating: " ", count: 40 - name.count), terminator: "")
     print("\(name): \(duration)")
 }
-

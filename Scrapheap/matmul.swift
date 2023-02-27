@@ -24,7 +24,7 @@ func testMatmul() {
         cmdBuffer.waitUntilCompleted()
     }
     let expectedC = device.makeBuffer(bytes: bufC.contents(), length: MemoryLayout<Float>.stride * M * N)!
-    clearDeviceMtx(bufC)
+    clearBuffer(bufC)
     printIfSmall(bufA, bufB, bufC, M, N, K)
 
     let matmul2DThreadtile = makePipeline(device, "matmul_2d_threadtile")
