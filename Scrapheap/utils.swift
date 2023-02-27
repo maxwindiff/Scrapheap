@@ -2,21 +2,13 @@ import Foundation
 import Metal
 import MetalPerformanceShaders
 
-func makeRandomDeviceVec(_ device:MTLDevice, _ N:Int) -> (MTLBuffer, MPSVector) {
-    let buf = device.makeBuffer(length: MemoryLayout<Float>.stride * N)!
-    let desc = MPSVectorDescriptor(length: N, dataType: .float32)
-    let vec = MPSVector(buffer: buf, descriptor: desc)
-    let rnd = MPSMatrixRandomMTGP32(device: device,
-                                    destinationDataType: .float32,
-                                    seed: 0,
-                                    distributionDescriptor: .uniformDistributionDescriptor(withMinimum: 0, maximum: 1))
-    let cmdQueue = device.makeCommandQueue()!
-    let cmdBuffer = cmdQueue.makeCommandBuffer()!
-    cmdBuffer.label = "MPSMatrixRandom"
-    rnd.encode(commandBuffer: cmdBuffer, destinationVector: vec)
-    cmdBuffer.commit()
-    cmdBuffer.waitUntilCompleted()
-    return (buf, vec)
+func makeFilledDeviceVec<T>(_ device:MTLDevice, _ N:Int, _ value:T) -> MTLBuffer {
+    let buf = device.makeBuffer(length: MemoryLayout<T>.stride * N)!
+    let contents = buf.contents().bindMemory(to: T.self, capacity: N)
+    for i in 0..<N {
+        contents[i] = value
+    }
+    return buf
 }
 
 func makeRandomDeviceMtx(_ device:MTLDevice, _ M:Int, _ N:Int) -> (MTLBuffer, MPSMatrix) {
@@ -52,21 +44,21 @@ func printMtx(_ heading:String, _ mtx:UnsafePointer<Float>, _ rows:Int, _ cols:I
     print("")
 }
 
-func printVec(_ heading:String, _ mtx:UnsafePointer<Float>, _ len:Int) {
-    print(heading, "[", terminator: "")
-    for j in 0..<len {
-        print(String(format: " %9.6f", mtx[j]), terminator: "")
-    }
-    print(" ];")
-}
-
 func printDeviceMtx(_ heading:String, _ buf:MTLBuffer, _ rows:Int, _ cols:Int) {
     let contents = buf.contents().bindMemory(to: Float.self, capacity: rows * cols)
     printMtx(heading, contents, rows, cols)
 }
 
+func printVec(_ heading:String, _ mtx:UnsafePointer<UInt32>, _ len:Int) {
+    print(heading, "[", terminator: "")
+    for j in 0..<len {
+        print(String(format: " %9d", mtx[j]), terminator: "")
+    }
+    print(" ];")
+}
+
 func printDeviceVec(_ heading:String, _ buf:MTLBuffer, _ len:Int) {
-    let contents = buf.contents().bindMemory(to: Float.self, capacity: len)
+    let contents = buf.contents().bindMemory(to: UInt32.self, capacity: len)
     printVec(heading, contents, len)
 }
 

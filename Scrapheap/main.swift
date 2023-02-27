@@ -1,3 +1,4 @@
 import Foundation
 
-testMatmul()
+//testMatmul()
+testReduce()

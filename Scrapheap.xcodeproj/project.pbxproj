@@ -11,6 +11,8 @@
 		0068636929AC115A00E18E2A /* matmul.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0068636629AC115A00E18E2A /* matmul.swift */; };
 		0068636A29AC115A00E18E2A /* utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0068636729AC115A00E18E2A /* utils.swift */; };
 		0068636B29AC115A00E18E2A /* matmul.metal in Sources */ = {isa = PBXBuildFile; fileRef = 0068636829AC115A00E18E2A /* matmul.metal */; };
+		0068636D29AC17A400E18E2A /* reduce.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0068636C29AC17A400E18E2A /* reduce.swift */; };
+		0068636F29AC18A000E18E2A /* reduce_mke.metal in Sources */ = {isa = PBXBuildFile; fileRef = 0068636E29AC18A000E18E2A /* reduce_mke.metal */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -31,6 +33,8 @@
 		0068636629AC115A00E18E2A /* matmul.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = matmul.swift; sourceTree = "<group>"; };
 		0068636729AC115A00E18E2A /* utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = utils.swift; sourceTree = "<group>"; };
 		0068636829AC115A00E18E2A /* matmul.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = matmul.metal; sourceTree = "<group>"; };
+		0068636C29AC17A400E18E2A /* reduce.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = reduce.swift; sourceTree = "<group>"; };
+		0068636E29AC18A000E18E2A /* reduce_mke.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = reduce_mke.metal; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,8 +67,10 @@
 		0068635E29AC102600E18E2A /* Scrapheap */ = {
 			isa = PBXGroup;
 			children = (
+				0068636E29AC18A000E18E2A /* reduce_mke.metal */,
 				0068636829AC115A00E18E2A /* matmul.metal */,
 				0068636629AC115A00E18E2A /* matmul.swift */,
+				0068636C29AC17A400E18E2A /* reduce.swift */,
 				0068636729AC115A00E18E2A /* utils.swift */,
 				0068635F29AC102600E18E2A /* main.swift */,
 			);
@@ -129,6 +135,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0068636D29AC17A400E18E2A /* reduce.swift in Sources */,
+				0068636F29AC18A000E18E2A /* reduce_mke.metal in Sources */,
 				0068636A29AC115A00E18E2A /* utils.swift in Sources */,
 				0068636B29AC115A00E18E2A /* matmul.metal in Sources */,
 				0068636029AC102600E18E2A /* main.swift in Sources */,
