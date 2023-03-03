@@ -13,6 +13,7 @@
 		0068636B29AC115A00E18E2A /* matmul.metal in Sources */ = {isa = PBXBuildFile; fileRef = 0068636829AC115A00E18E2A /* matmul.metal */; };
 		0068636D29AC17A400E18E2A /* reduce.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0068636C29AC17A400E18E2A /* reduce.swift */; };
 		0068636F29AC18A000E18E2A /* reduce_mke.metal in Sources */ = {isa = PBXBuildFile; fileRef = 0068636E29AC18A000E18E2A /* reduce_mke.metal */; };
+		00CA2AFF29AC6E81008DDE77 /* simd.metal in Sources */ = {isa = PBXBuildFile; fileRef = 00CA2AFE29AC6E81008DDE77 /* simd.metal */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -35,6 +36,7 @@
 		0068636829AC115A00E18E2A /* matmul.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = matmul.metal; sourceTree = "<group>"; };
 		0068636C29AC17A400E18E2A /* reduce.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = reduce.swift; sourceTree = "<group>"; };
 		0068636E29AC18A000E18E2A /* reduce_mke.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = reduce_mke.metal; sourceTree = "<group>"; };
+		00CA2AFE29AC6E81008DDE77 /* simd.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = simd.metal; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,6 +75,7 @@
 				0068636C29AC17A400E18E2A /* reduce.swift */,
 				0068636729AC115A00E18E2A /* utils.swift */,
 				0068635F29AC102600E18E2A /* main.swift */,
+				00CA2AFE29AC6E81008DDE77 /* simd.metal */,
 			);
 			path = Scrapheap;
 			sourceTree = "<group>";
@@ -138,6 +141,7 @@
 				0068636D29AC17A400E18E2A /* reduce.swift in Sources */,
 				0068636F29AC18A000E18E2A /* reduce_mke.metal in Sources */,
 				0068636A29AC115A00E18E2A /* utils.swift in Sources */,
+				00CA2AFF29AC6E81008DDE77 /* simd.metal in Sources */,
 				0068636B29AC115A00E18E2A /* matmul.metal in Sources */,
 				0068636029AC102600E18E2A /* main.swift in Sources */,
 				0068636929AC115A00E18E2A /* matmul.swift in Sources */,
