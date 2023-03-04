@@ -14,9 +14,9 @@ function bench(typ, size)
   @info "$size x $size ($typ)" typeof(da) typeof(db) sum(da) sum(db)
   println()
 
-  for size in [1 2 4 8 16]
-    println("Grain size = $size")
-    Metal.set_grain_size!(size) # temp hack to override the grain size
+  for grain in [1 2 4 8 16]
+    println("Grain size = $grain")
+    Metal.set_grain_size!(grain) # temp hack to override the grain size
     print("1D sum:")
     @btime sum(da)
     print("2D sum:")
