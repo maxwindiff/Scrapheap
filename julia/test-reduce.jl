@@ -1,15 +1,35 @@
 using Revise, Metal, BenchmarkTools
 
-function init(dims...)
-  a = Array{Float32}(undef, dims...)
-  for i in 1:length(a)
-    a[i] = 1
-  end
+function init(dims...; val=Float32(1))
+  a = fill(val, dims...)
   return (a, MtlArray(a))
 end
 
 a, da = init(8192 * 8192);
 b, db = init(8192, 8192);
+
+function bench(typ, size)
+  println("\n=== $size x $size ($typ) ===\n")
+  a, da = init(size * size; val=convert(typ, 1))
+  b, db = init(size, size; val=convert(typ, 1))
+  for stride in [1 2 4 8 16]
+    println("Grain size = $stride")
+    Metal.set_reduction_stride!(stride)
+    print("1D sum:")
+    @btime sum(da)
+    print("2D sum:")
+    @btime sum(db)
+    println()
+  end
+end
+
+function benchall()
+  for size in [8192 8191]
+    for typ in [Float32 Float16 Int32 UInt32 Int16 UInt16 Int8 UInt8]
+      bench(typ, size)
+    end
+  end
+end
 
 # julia> @btime sum(da)
 #   6.084 ms (754 allocations: 20.80 KiB)
