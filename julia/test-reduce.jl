@@ -3,21 +3,13 @@ using Revise, Metal, BenchmarkTools
 function init(dims...)
   a = Array{Float32}(undef, dims...)
   for i in 1:length(a)
-    a[i] = i >> 20
+    a[i] = 1
   end
   return (a, MtlArray(a))
 end
 
 a, da = init(8192 * 8192);
 b, db = init(8192, 8192);
-
-# julia> @btime sum(a)
-#   5.571 ms (1 allocation: 16 bytes)
-# 2.2518f15
-
-# julia> @btime sum(b)
-#   5.577 ms (1 allocation: 16 bytes)
-# 2.2518f15
 
 # julia> @btime sum(da)
 #   6.084 ms (754 allocations: 20.80 KiB)
@@ -62,13 +54,14 @@ function reduce_group(op, neutral::T, in::MtlDeviceArray{T}, out::MtlDeviceArray
 
   @inbounds begin
     # Read and reduce multiple values per thread
-    shared[tid] = 0
+    val = 0
     base = (thread_position_in_grid_1d() - 1) * stride
     i = base + 1
     while i <= base+stride
-      shared[tid] = op(shared[tid], in[i])
+      val = op(val, in[i])
       i += 1
     end
+    shared[tid] = val
     threadgroup_barrier(Metal.MemoryFlagThreadGroup)
 
     offset::UInt32 = 512
