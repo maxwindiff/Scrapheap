@@ -1,4 +1,4 @@
-using Revise, Metal, BenchmarkTools
+using Revise, Metal, BenchmarkTools, Combinatorics, Printf
 
 function init(dims...; val=Float32(1))
   a = fill(val, dims...)
@@ -7,6 +7,7 @@ end
 
 a, da = init(8192 * 8192);
 b, db = init(8192, 8192);
+c, dc = init(314, 415, 515);  # close to 8192*8192
 
 function bench(typ, size)
   da = MtlArray(fill(convert(typ, 1), size * size))
@@ -18,9 +19,9 @@ function bench(typ, size)
     println("Grain size = $grain")
     Metal.set_grain_size!(grain) # temp hack to override the grain size
     print("1D sum:")
-    @btime sum(da)
+    @btime sum($da)
     print("2D sum:")
-    @btime sum(db)
+    @btime sum($db)
     println()
   end
 end
@@ -33,17 +34,12 @@ function benchall()
   end
 end
 
-# julia> @btime sum(da)
-#   6.084 ms (754 allocations: 20.80 KiB)
-# 2.2517998f15
-
-# julia> @btime sum(db)
-#   7.544 ms (759 allocations: 21.33 KiB)
-# 2.2517998f15
-
-# julia> @btime myreduce(+, da)
-#   1.774 ms (579 allocations: 16.38 KiB)
-# 2.2517998f15
+function benchdims()
+  for dims in powerset(1:3)
+    @printf "sum(dc; dims=%-9s)" dims
+    @btime sum($dc; dims=$dims)
+  end
+end
 
 neutral_element(op, T) =
     error("""GPUArrays.jl needs to know the neutral element for your operator `$op`.

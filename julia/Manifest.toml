@@ -2,7 +2,7 @@
 
 julia_version = "1.8.5"
 manifest_format = "2.0"
-project_hash = "71f5d65754b537c0bf8a27d173dd0a786c7a81c0"
+project_hash = "b462f2770c293ca0b1f10aa8ee8952a1a2cfeabc"
 
 [[deps.Adapt]]
 deps = ["LinearAlgebra", "Requires"]
@@ -36,6 +36,11 @@ deps = ["InteractiveUtils", "UUIDs"]
 git-tree-sha1 = "4f619d394ac521dc59cb80a2cd8f78578e483a9d"
 uuid = "da1fd8a2-8d9e-5ec2-8556-3022fb5608a2"
 version = "1.2.1"
+
+[[deps.Combinatorics]]
+git-tree-sha1 = "08c8b6831dc00bfea825826be0bc8336fc369860"
+uuid = "861a8166-3701-5b0c-9a16-15d98fcdc6aa"
+version = "1.0.2"
 
 [[deps.CompilerSupportLibraries_jll]]
 deps = ["Artifacts", "Libdl"]
@@ -71,15 +76,15 @@ version = "8.6.3"
 
 [[deps.GPUArraysCore]]
 deps = ["Adapt"]
-git-tree-sha1 = "1cd7f0af1aa58abc02ea1d872953a97359cb87fa"
+path = "../../../.julia/dev/GPUArrays/lib/GPUArraysCore"
 uuid = "46192b85-c4d5-4398-a991-12ede77f4527"
 version = "0.1.4"
 
 [[deps.GPUCompiler]]
 deps = ["ExprTools", "InteractiveUtils", "LLVM", "Libdl", "Logging", "TimerOutputs", "UUIDs"]
-git-tree-sha1 = "52e5130de56b1c2cab76003b816bfedcfe9fc09b"
+git-tree-sha1 = "95185985a5d2388c6d0fedb06181ad4ddd40e0cb"
 uuid = "61eb1bfa-7361-4325-ad38-22787b887f55"
-version = "0.16.8"
+version = "0.17.2"
 
 [[deps.InteractiveUtils]]
 deps = ["Markdown"]
@@ -167,7 +172,7 @@ version = "2.28.0+0"
 deps = ["Adapt", "CEnum", "ExprTools", "GPUArrays", "GPUCompiler", "LLVM", "LinearAlgebra", "Metal_LLVM_Tools_jll", "Random", "Reexport", "cmt_jll"]
 path = "/Users/kichi/.julia/dev/Metal"
 uuid = "dde4c033-4e86-420c-a63e-0dd931031962"
-version = "0.1.2"
+version = "0.2.0"
 
 [[deps.Metal_LLVM_Tools_jll]]
 deps = ["Artifacts", "JLLWrappers", "LazyArtifacts", "Libdl", "Pkg", "TOML", "Zlib_jll"]
@@ -198,9 +203,9 @@ version = "1.4.1"
 
 [[deps.Parsers]]
 deps = ["Dates", "SnoopPrecompile"]
-git-tree-sha1 = "6f4fbcd1ad45905a5dee3f4256fabb49aa2110c6"
+git-tree-sha1 = "478ac6c952fddd4399e71d4779797c538d0ff2bf"
 uuid = "69de0a69-1ddd-5017-9359-2bf0b02dc9f0"
-version = "2.5.7"
+version = "2.5.8"
 
 [[deps.Pkg]]
 deps = ["Artifacts", "Dates", "Downloads", "LibGit2", "Libdl", "Logging", "Markdown", "Printf", "REPL", "Random", "SHA", "Serialization", "TOML", "Tar", "UUIDs", "p7zip_jll"]
@@ -299,10 +304,10 @@ uuid = "83775a58-1f1d-513f-b197-d71354ab007a"
 version = "1.2.12+3"
 
 [[deps.cmt_jll]]
-deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
-git-tree-sha1 = "b9b9836ba3d6871ff9819502144a59a2cdc6a7f2"
+deps = ["Artifacts", "JLLWrappers", "Libdl"]
+git-tree-sha1 = "049e4965e08ffb1fe62f731c385b92cf62d34817"
 uuid = "65323cdd-17ec-5719-9643-72016a7f97e3"
-version = "0.1.0+0"
+version = "0.2.0+0"
 
 [[deps.libblastrampoline_jll]]
 deps = ["Artifacts", "Libdl", "OpenBLAS_jll"]
