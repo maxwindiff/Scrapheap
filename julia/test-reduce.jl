@@ -7,7 +7,7 @@ end
 
 a, da = init(8192 * 8192);
 b, db = init(8192, 8192);
-c, dc = init(314, 415, 515);  # close to 8192 * 8192
+c, dc = init(256, 512, 512);
 
 function trygrains(f)
   for grain in [1 2 4 8 16]
@@ -64,9 +64,10 @@ function bench_nonp2(typ)
 end
 
 function benchall()
-  for typ in [Float32 Float16 Int64 UInt64 Int32 UInt32 Int16 UInt16 Int8 UInt8]
-    println("===================== $typ =====================\n")
+  for typ in [Int64 Float32 Int32 Float16 Int16 Int8]
+    println("===================== $typ (power of 2) =====================\n")
     bench_p2(typ)
+    println("===================== $typ (non-pow of 2) =====================\n")
     bench_nonp2(typ)
   end
 end
