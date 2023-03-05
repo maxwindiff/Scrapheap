@@ -7,37 +7,67 @@ end
 
 a, da = init(8192 * 8192);
 b, db = init(8192, 8192);
-c, dc = init(314, 415, 515);  # close to 8192*8192
+c, dc = init(314, 415, 515);  # close to 8192 * 8192
 
-function bench(typ, size)
-  da = MtlArray(fill(convert(typ, 1), size * size))
-  db = MtlArray(fill(convert(typ, 1), size, size))
-  @info "$size x $size ($typ)" typeof(da) typeof(db) sum(da) sum(db)
+function trygrains(f)
+  for grain in [1 2 4 8 16]
+    @printf "grain=%-2d:" grain
+    Metal.set_grain_size!(grain)  # temp hack to override the grain size
+    f(grain)
+  end
+end
+
+function bench_p2(typ)
+  d1 = MtlArray(fill(convert(typ, 1), 8192 * 8192))
+  d2 = MtlArray(fill(convert(typ, 1), 8192, 8192))
+  d3 = MtlArray(fill(convert(typ, 1), 256, 512, 512))
+  @info typ typeof(d1) typeof(d2) typeof(d3) sum(d1) sum(d2) sum(d3)
   println()
 
-  for grain in [1 2 4 8 16]
-    println("Grain size = $grain")
-    Metal.set_grain_size!(grain) # temp hack to override the grain size
-    print("1D sum:")
-    @btime sum($da)
-    print("2D sum:")
-    @btime sum($db)
+  println("sum($(size(d1)))")
+  trygrains() do _ @btime Metal.@sync sum($d1) end
+  println()
+
+  println("sum($(size(d2)))")
+  trygrains() do _ @btime Metal.@sync sum($d2) end
+  println()
+
+  for dims in powerset(1:3)
+    isempty(dims) && continue
+    println("sum($(size(d3)); dims=$dims)")
+    trygrains() do _ @btime Metal.@sync sum($d3; dims=$dims) end
+    println()
+  end
+end
+
+function bench_nonp2(typ)
+  d1 = MtlArray(fill(convert(typ, 1), 8191 * 8191))
+  d2 = MtlArray(fill(convert(typ, 1), 8191, 8191))
+  d3 = MtlArray(fill(convert(typ, 1), 26, 237, 10888))  # roughly 8191*8191
+  @info typ typeof(d1) typeof(d2) typeof(d3) sum(d1) sum(d2) sum(d3)
+  println()
+
+  println("sum($(size(d1)))")
+  trygrains() do _ @btime Metal.@sync sum($d1) end
+  println()
+
+  println("sum($(size(d2)))")
+  trygrains() do _ @btime Metal.@sync sum($d2) end
+  println()
+
+  for dims in powerset(1:3)
+    isempty(dims) && continue
+    println("sum($(size(d3)); dims=$dims)")
+    trygrains() do _ @btime Metal.@sync sum($d3; dims=$dims) end
     println()
   end
 end
 
 function benchall()
-  for size in [8192 8191]
-    for typ in [Int64 Float32 Float16 Int32 UInt32 Int16 UInt16 Int8 UInt8]
-      bench(typ, size)
-    end
-  end
-end
-
-function benchdims()
-  for dims in powerset(1:3)
-    @printf "sum(dc; dims=%-9s)" dims
-    @btime sum($dc; dims=$dims)
+  for typ in [Float32 Float16 Int64 UInt64 Int32 UInt32 Int16 UInt16 Int8 UInt8]
+    println("===================== $typ =====================\n")
+    bench_p2(typ)
+    bench_nonp2(typ)
   end
 end
 
