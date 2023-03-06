@@ -10,11 +10,12 @@ b, db = init(8192, 8192);
 c, dc = init(256, 512, 512);
 
 function trygrains(f)
-  for grain in [1 2 4 8 16]
-    @printf "grain=%-2d:" grain
-    Metal.set_grain_size!(grain)  # temp hack to override the grain size
-    f(grain)
-  end
+  # for grain in [1 2 4 8 16]
+  #   @printf "grain=%-2d:" grain
+  #   Metal.set_grain_size!(grain)  # temp hack to override the grain size
+  #   f(grain)
+  # end
+  f(0)
 end
 
 function bench_p2(typ)
@@ -24,20 +25,19 @@ function bench_p2(typ)
   @info typ typeof(d1) typeof(d2) typeof(d3) sum(d1) sum(d2) sum(d3)
   println()
 
-  println("sum($(size(d1)))")
+  @printf "%-40s" "sum($(size(d1)))"
   trygrains() do _ @btime Metal.@sync sum($d1) end
-  println()
 
-  println("sum($(size(d2)))")
+  @printf "%-40s" "sum($(size(d2)))"
   trygrains() do _ @btime Metal.@sync sum($d2) end
-  println()
 
   for dims in powerset(1:3)
     isempty(dims) && continue
-    println("sum($(size(d3)); dims=$dims)")
+    @printf "%-40s" "sum($(size(d3)); dims=$dims)"
     trygrains() do _ @btime Metal.@sync sum($d3; dims=$dims) end
-    println()
   end
+
+  println()
 end
 
 function bench_nonp2(typ)
@@ -47,20 +47,19 @@ function bench_nonp2(typ)
   @info typ typeof(d1) typeof(d2) typeof(d3) sum(d1) sum(d2) sum(d3)
   println()
 
-  println("sum($(size(d1)))")
+  @printf "%-40s" "sum($(size(d1)))"
   trygrains() do _ @btime Metal.@sync sum($d1) end
-  println()
 
-  println("sum($(size(d2)))")
+  @printf "%-40s" "sum($(size(d2)))"
   trygrains() do _ @btime Metal.@sync sum($d2) end
-  println()
 
   for dims in powerset(1:3)
     isempty(dims) && continue
-    println("sum($(size(d3)); dims=$dims)")
+    @printf "%-40s" "sum($(size(d3)); dims=$dims)"
     trygrains() do _ @btime Metal.@sync sum($d3; dims=$dims) end
-    println()
   end
+
+  println()
 end
 
 function benchall()
