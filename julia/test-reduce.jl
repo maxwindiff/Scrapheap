@@ -184,8 +184,8 @@ function myreduce(op, a::MtlArray{T}, stride=4) where {T}
   threads = min(length(a), 1024)
   groups = cld(length(a), 1024 * stride)
   b = similar(a, groups)
-  @metal threads=threads grid=groups reduce_group(op, neutral_element(op, T), a, b, Val(stride))
-  #@metal threads=threads grid=groups reduce_coop(op, neutral_element(op, T), a, b, Val(stride))
+  @metal threads=threads groups=groups reduce_group(op, neutral_element(op, T), a, b, Val(stride))
+  #@metal threads=threads groups=groups reduce_coop(op, neutral_element(op, T), a, b, Val(stride))
   if groups == 1
     return b[1]
   elseif groups < 32
